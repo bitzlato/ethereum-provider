@@ -1,0 +1,31 @@
+{
+  "name": "@bitzlato/ethereum-provider",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitzlato/ethereum-provider.git"
+  },
+  "keywords": [
+    "ethereum",
+    "provider",
+    "metamask"
+  ],
+  "author": "https://github.com/c0gnize",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bitzlato/ethereum-provider/issues"
+  },
+  "homepage": "https://github.com/bitzlato/ethereum-provider#readme",
+  "devDependencies": {
+    "typescript": "^4.4.4"
+  },
+  "description": "Helps to work with the MetaMask and Providers compliant with EIP 1193"
+}
