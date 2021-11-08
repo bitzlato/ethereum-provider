@@ -66,15 +66,15 @@ export interface ProviderConnectInfo {
   readonly chainId: string;
 }
 
-const enum ChainId {
-  Mainnet = 1,
-  Ropsten = 3,
-  Rinkeby = 4,
-  Goerli = 5,
-  Kovan = 42,
+export enum ChainId {
+  Mainnet = '0x1',
+  Ropsten = '0x3',
+  Rinkeby = '0x4',
+  Goerli = '0x5',
+  Kovan = '0x2a',
 }
 
-const chainName: Record<number, string> = {
+const chainName: Record<string, string> = {
   [ChainId.Mainnet]: 'Mainnet',
   [ChainId.Ropsten]: 'Ropsten Test Network',
   [ChainId.Rinkeby]: 'Rinkeby Test Network',
@@ -97,5 +97,5 @@ export function getMetaMaskProvider(): MetaMaskProvider | undefined {
 }
 
 export function getChainName(chainId: HexString): string {
-  return chainName[parseInt(chainId, 16)] ?? chainId;
+  return chainName[chainId.toLowerCase()] ?? chainId;
 }
