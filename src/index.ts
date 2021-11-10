@@ -1,8 +1,10 @@
+import { EIP712TypedData } from "./eip712";
+
 /**
  * @see https://eips.ethereum.org/EIPS/eip-1193
  */
 
- export interface EventEmitter {
+export interface EventEmitter {
   /* eslint-disable prettier/prettier */
   on(eventName: 'accountsChanged', listener: (accounts: string[]) => void): this;
   on(eventName: 'message', listener: (message: ProviderMessage | EthSubscription) => void): this;
@@ -20,14 +22,17 @@ export interface MetaMaskProvider extends EventEmitter {
   isConnected(): boolean;
 
   request(args: { method: 'eth_chainId' }): Promise<HexString>;
-  request(args: { method: 'eth_accounts' }): Promise<string[]>;
+  request(args: { method: 'eth_accounts' }): Promise<Address[]>;
   request(args: { method: 'eth_requestAccounts' }): Promise<string[]>;
   request(args: { method: 'eth_sendTransaction', params: TransactionParams[] }): Promise<HexString>;
-  request(args: RequestArguments): Promise<unknown>;
+  request(args: { method: 'personal_sign', params: [string, Address, string] }): Promise<Signature>;
+  request(args: { method: 'personal_ecRecover', params: [string, Signature] }): Promise<Address>;
+  request(args: { method: 'eth_signTypedData_v4', params: [HexString, EIP712TypedData | string] }): Promise<HexString>;
+  // request(args: RequestArguments): Promise<unknown>;
 }
 
 interface TransactionParams {
-  from: HexString;
+  from: Address;
   to?: HexString;
   value?: HexString;
   gasPrice?: HexString;
@@ -37,8 +42,10 @@ interface TransactionParams {
 }
 
 export type HexString = string;
+export type Address = string;
+export type Signature = string;
 
-interface RequestArguments {
+export interface RequestArguments {
   readonly method: string;
   readonly params?: readonly unknown[] | object;
 }
@@ -74,8 +81,8 @@ export enum ChainId {
   Kovan = '0x2a',
 }
 
-const chainName: Record<string, string> = {
-  [ChainId.Mainnet]: 'Mainnet',
+const CHAIN_NAME: Record<string, string> = {
+  [ChainId.Mainnet]: 'Ethereum Mainnet',
   [ChainId.Ropsten]: 'Ropsten Test Network',
   [ChainId.Rinkeby]: 'Rinkeby Test Network',
   [ChainId.Goerli]: 'Goerli Test Network',
@@ -97,5 +104,5 @@ export function getMetaMaskProvider(): MetaMaskProvider | undefined {
 }
 
 export function getChainName(chainId: HexString): string {
-  return chainName[chainId.toLowerCase()] ?? chainId;
+  return CHAIN_NAME[chainId.toLowerCase()] ?? chainId;
 }
